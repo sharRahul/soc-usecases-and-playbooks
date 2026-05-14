@@ -31,20 +31,44 @@ Use this repository to:
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
 ├── LICENSE
-└── docs/
-    ├── detection-logic-documentation.md
-    ├── triage-instructions.md
-    ├── playbook-flowcharts.md
-    └── mitre-attack-coverage.md
+├── .github/
+│   └── workflows/
+│       └── validate-usecases.yml
+├── docs/
+│   ├── detection-logic-documentation.md
+│   ├── metrics-template.md
+│   ├── mitre-attack-coverage.md
+│   ├── playbook-flowcharts.md
+│   ├── threat-intel-integration.md
+│   └── triage-instructions.md
+└── use-cases/
+    ├── UC-CLOUD-001-Impossible-Travel.md
+    ├── UC-EMAIL-001-Phishing-Credential-Harvest.md
+    ├── UC-ENDPOINT-001-Possible-LSASS-Credential-Dump.md
+    ├── UC-IDENTITY-001-MFA-Fatigue-Attack.md
+    └── UC-IDENTITY-002-Malicious-OAuth-App-Consent.md
 ```
 
 ## Quick start
 
 1. Read [`docs/detection-logic-documentation.md`](docs/detection-logic-documentation.md) to understand the required fields for every detection.
-2. Use [`docs/triage-instructions.md`](docs/triage-instructions.md) as the analyst first-response template.
-3. Use [`docs/playbook-flowcharts.md`](docs/playbook-flowcharts.md) to create Mermaid decision trees for each playbook.
-4. Maintain ATT&CK mapping in [`docs/mitre-attack-coverage.md`](docs/mitre-attack-coverage.md).
-5. Update [`CHANGELOG.md`](CHANGELOG.md) whenever detection logic, playbook steps, escalation criteria, or severity guidance changes.
+2. Review the first populated use cases in [`use-cases/`](use-cases/).
+3. Use [`docs/triage-instructions.md`](docs/triage-instructions.md) as the analyst first-response template.
+4. Use [`docs/playbook-flowcharts.md`](docs/playbook-flowcharts.md) to follow Mermaid decision trees for each playbook.
+5. Maintain ATT&CK mapping in [`docs/mitre-attack-coverage.md`](docs/mitre-attack-coverage.md).
+6. Track detection quality with [`docs/metrics-template.md`](docs/metrics-template.md).
+7. Use [`docs/threat-intel-integration.md`](docs/threat-intel-integration.md) to enrich detections with threat intelligence.
+8. Update [`CHANGELOG.md`](CHANGELOG.md) whenever detection logic, playbook steps, escalation criteria, or severity guidance changes.
+
+## Initial use cases
+
+| Use case | Focus | Severity |
+| --- | --- | --- |
+| [`UC-IDENTITY-001-MFA-Fatigue-Attack`](use-cases/UC-IDENTITY-001-MFA-Fatigue-Attack.md) | Repeated MFA failures followed by success | High |
+| [`UC-IDENTITY-002-Malicious-OAuth-App-Consent`](use-cases/UC-IDENTITY-002-Malicious-OAuth-App-Consent.md) | Risky third-party OAuth consent | High |
+| [`UC-CLOUD-001-Impossible-Travel`](use-cases/UC-CLOUD-001-Impossible-Travel.md) | Implausible cloud account travel pattern | Medium, tunable to High |
+| [`UC-EMAIL-001-Phishing-Credential-Harvest`](use-cases/UC-EMAIL-001-Phishing-Credential-Harvest.md) | Phishing email with allowed URL click | High |
+| [`UC-ENDPOINT-001-Possible-LSASS-Credential-Dump`](use-cases/UC-ENDPOINT-001-Possible-LSASS-Credential-Dump.md) | Possible LSASS credential dumping | Critical |
 
 ## Minimum standard for each SOC use case
 
@@ -74,6 +98,10 @@ UC-CLOUD-001-Impossible-Travel.md
 UC-EMAIL-001-Phishing-With-Malicious-Link.md
 ```
 
+## Validation
+
+A GitHub Actions workflow validates that each Markdown file in `use-cases/` follows the naming convention and includes the required operational section headers.
+
 ## Analyst operating principle
 
 At 03:00, the analyst should be able to answer:
@@ -95,6 +123,8 @@ This repository can support evidence for security monitoring and incident respon
 - MITRE ATT&CK coverage.
 - Playbook change history.
 - Response evidence expectations.
+- Metrics review and tuning cadence.
+- Threat intelligence enrichment process.
 
 ## Contributing
 
