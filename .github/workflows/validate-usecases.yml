@@ -1,0 +1,78 @@
+name: Validate SOC use cases
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate-usecases:
+    name: Validate use-case Markdown files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate use-case filenames and required headers
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_headers=(
+            "Alert name"
+            "MITRE ATT&CK"
+            "Severity"
+            "Triage steps"
+            "Escalation criteria"
+            "Containment and recovery"
+          )
+
+          filename_regex='^UC-[A-Z]+-[0-9]{3}-[A-Za-z0-9-]+\.md$'
+          status=0
+
+          echo "# Use-case validation summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| File | Filename | Required headers | Result |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ ! -d "use-cases" ]; then
+            echo "::error::use-cases directory was not found"
+            echo "| use-cases/ | Fail | Fail | Missing directory |" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          mapfile -t files < <(find use-cases -maxdepth 1 -type f -name '*.md' | sort)
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "::error::No Markdown use-case files found in use-cases/"
+            echo "| use-cases/ | Fail | Fail | No Markdown files found |" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          for file in "${files[@]}"; do
+            base_name="$(basename "$file")"
+            filename_result="Pass"
+            headers_result="Pass"
+            result="Pass"
+
+            if [[ ! "$base_name" =~ $filename_regex ]]; then
+              filename_result="Fail"
+              result="Fail"
+              status=1
+              echo "::error file=$file::Filename does not follow UC-[CATEGORY]-[NNN]-[Description].md"
+            fi
+
+            for header in "${required_headers[@]}"; do
+              if ! grep -Fq "$header" "$file"; then
+                headers_result="Fail"
+                result="Fail"
+                status=1
+                echo "::error file=$file::Missing required section header: $header"
+              fi
+            done
+
+            echo "[$result] $file - filename: $filename_result, headers: $headers_result"
+            echo "| \\`$file\\` | $filename_result | $headers_result | $result |" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+          exit "$status"
