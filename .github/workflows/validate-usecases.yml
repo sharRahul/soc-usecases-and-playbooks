@@ -13,18 +13,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate use-case filenames and required headers
+      - name: Validate use-case filenames, required headers, and register sync
         shell: bash
         run: |
           set -euo pipefail
 
           required_headers=(
             "Alert name"
+            "Objective"
+            "Threat scenario"
+            "Required data sources"
+            "Detection logic"
             "MITRE ATT&CK"
             "Severity"
+            "False positive scenarios"
+            "Tuning notes"
             "Triage steps"
             "Escalation criteria"
+            "Evidence to preserve"
             "Containment and recovery"
+            "Lessons learned fields"
           )
 
           filename_regex='^UC-[A-Z]+-[0-9]{3}-[A-Za-z0-9-]+\.md$'
@@ -32,12 +40,12 @@ jobs:
 
           echo "# Use-case validation summary" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "| File | Filename | Required headers | Result |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| File | Filename | Required headers | Register sync | Result |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
 
           if [ ! -d "use-cases" ]; then
             echo "::error::use-cases directory was not found"
-            echo "| use-cases/ | Fail | Fail | Missing directory |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| use-cases/ | Fail | Fail | Fail | Missing directory |" >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
 
@@ -45,14 +53,18 @@ jobs:
 
           if [ "${#files[@]}" -eq 0 ]; then
             echo "::error::No Markdown use-case files found in use-cases/"
-            echo "| use-cases/ | Fail | Fail | No Markdown files found |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| use-cases/ | Fail | Fail | Fail | No Markdown files found |" >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
 
+          declare -A seen_ids=()
+
           for file in "${files[@]}"; do
             base_name="$(basename "$file")"
+            use_case_id="${base_name%.md}"
             filename_result="Pass"
             headers_result="Pass"
+            sync_result="Pass"
             result="Pass"
 
             if [[ ! "$base_name" =~ $filename_regex ]]; then
@@ -62,17 +74,39 @@ jobs:
               echo "::error file=$file::Filename does not follow UC-[CATEGORY]-[NNN]-[Description].md"
             fi
 
+            if [[ -n "${seen_ids[$use_case_id]+x}" ]]; then
+              filename_result="Fail"
+              result="Fail"
+              status=1
+              echo "::error file=$file::Duplicate use-case ID detected: $use_case_id"
+            fi
+            seen_ids[$use_case_id]=1
+
             for header in "${required_headers[@]}"; do
-              if ! grep -Fq "$header" "$file"; then
+              if ! grep -Eq "^##[[:space:]]+$header[[:space:]]*$" "$file"; then
                 headers_result="Fail"
                 result="Fail"
                 status=1
-                echo "::error file=$file::Missing required section header: $header"
+                echo "::error file=$file::Missing required section header: ## $header"
               fi
             done
 
-            echo "[$result] $file - filename: $filename_result, headers: $headers_result"
-            echo "| \\`$file\\` | $filename_result | $headers_result | $result |" >> "$GITHUB_STEP_SUMMARY"
+            if [ -f "docs/metrics-template.md" ] && ! grep -Fq "$use_case_id" docs/metrics-template.md; then
+              sync_result="Fail"
+              result="Fail"
+              status=1
+              echo "::error file=docs/metrics-template.md::Missing metrics row for $use_case_id"
+            fi
+
+            if [ -f "docs/mitre-attack-coverage.md" ] && ! grep -Fq "$use_case_id" docs/mitre-attack-coverage.md; then
+              sync_result="Fail"
+              result="Fail"
+              status=1
+              echo "::error file=docs/mitre-attack-coverage.md::Missing MITRE coverage row for $use_case_id"
+            fi
+
+            echo "[$result] $file - filename: $filename_result, headers: $headers_result, register sync: $sync_result"
+            echo "| \`$file\` | $filename_result | $headers_result | $sync_result | $result |" >> "$GITHUB_STEP_SUMMARY"
           done
 
           exit "$status"
