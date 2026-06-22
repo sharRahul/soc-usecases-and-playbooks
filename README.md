@@ -40,7 +40,9 @@ Use this repository to:
 │   ├── mitre-attack-coverage.md
 │   ├── playbook-flowcharts.md
 │   ├── threat-intel-integration.md
-│   └── triage-instructions.md
+│   ├── triage-instructions.md
+│   ├── use-case-lifecycle.md
+│   └── use-case-template.md
 └── use-cases/
     ├── UC-CLOUD-001-Impossible-Travel.md
     ├── UC-EMAIL-001-Phishing-Credential-Harvest.md
@@ -52,13 +54,15 @@ Use this repository to:
 ## Quick start
 
 1. Read [`docs/detection-logic-documentation.md`](docs/detection-logic-documentation.md) to understand the required fields for every detection.
-2. Review the first populated use cases in [`use-cases/`](use-cases/).
-3. Use [`docs/triage-instructions.md`](docs/triage-instructions.md) as the analyst first-response template.
-4. Use [`docs/playbook-flowcharts.md`](docs/playbook-flowcharts.md) to follow Mermaid decision trees for each playbook.
-5. Maintain ATT&CK mapping in [`docs/mitre-attack-coverage.md`](docs/mitre-attack-coverage.md).
-6. Track detection quality with [`docs/metrics-template.md`](docs/metrics-template.md).
-7. Use [`docs/threat-intel-integration.md`](docs/threat-intel-integration.md) to enrich detections with threat intelligence.
-8. Update [`CHANGELOG.md`](CHANGELOG.md) whenever detection logic, playbook steps, escalation criteria, or severity guidance changes.
+2. Use [`docs/use-case-template.md`](docs/use-case-template.md) when drafting a new detection or playbook.
+3. Use [`docs/use-case-lifecycle.md`](docs/use-case-lifecycle.md) to understand draft, validated, operational, tuning-required, and retired status expectations.
+4. Review the first populated use cases in [`use-cases/`](use-cases/).
+5. Use [`docs/triage-instructions.md`](docs/triage-instructions.md) as the analyst first-response template.
+6. Use [`docs/playbook-flowcharts.md`](docs/playbook-flowcharts.md) to follow Mermaid decision trees for each playbook.
+7. Maintain ATT&CK mapping in [`docs/mitre-attack-coverage.md`](docs/mitre-attack-coverage.md).
+8. Track detection quality with [`docs/metrics-template.md`](docs/metrics-template.md).
+9. Use [`docs/threat-intel-integration.md`](docs/threat-intel-integration.md) to enrich detections with threat intelligence.
+10. Update [`CHANGELOG.md`](CHANGELOG.md) whenever detection logic, playbook steps, escalation criteria, or severity guidance changes.
 
 ## Initial use cases
 
@@ -100,7 +104,7 @@ UC-EMAIL-001-Phishing-With-Malicious-Link.md
 
 ## Validation
 
-A GitHub Actions workflow validates that each Markdown file in `use-cases/` follows the naming convention and includes the required operational section headers.
+A GitHub Actions workflow validates that each Markdown file in `use-cases/` follows the naming convention, includes the required operational section headers, and stays represented in the metrics and MITRE ATT&CK coverage registers.
 
 ## Analyst operating principle
 
