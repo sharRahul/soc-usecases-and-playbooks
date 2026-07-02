@@ -42,10 +42,23 @@ Playbooks should include:
 - Recovery and closure criteria.
 - Post-incident improvement notes.
 
+## Front-matter and generated files
+
+Every use case starts with a YAML front-matter block. See the field rules in [`docs/use-case-template.md`](docs/use-case-template.md). The MITRE coverage register, metrics register, use-case index, data-source onboarding table, Sigma exports, and ATT&CK Navigator layer are all generated from this front-matter. Never edit the generated tables or files directly. After changing a use case, run:
+
+```bash
+python3 scripts/generate_registers.py
+python3 scripts/validate_detections.py
+```
+
+and commit the regenerated files alongside your change. CI fails if generated files are stale or an embedded detection does not parse.
+
 ## Pull request checklist
 
 Before opening a pull request, confirm that:
 
+- [ ] `python3 scripts/generate_registers.py` was run and the regenerated files are committed.
+- [ ] `python3 scripts/validate_detections.py` passes.
 - [ ] No sensitive or real incident data is included.
 - [ ] Detection logic has required data sources listed.
 - [ ] False positive scenarios are documented.

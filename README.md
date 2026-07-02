@@ -31,10 +31,12 @@ Use this repository to:
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
 ├── LICENSE
+├── .gitignore
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── content-request.md
 │   │   └── tuning-request.md
+│   ├── pull_request_template.md
 │   └── workflows/
 │       └── validate-usecases.yml
 ├── docs/
@@ -49,7 +51,8 @@ Use this repository to:
 │   ├── use-case-lifecycle.md
 │   └── use-case-template.md
 ├── scripts/
-│   └── generate_registers.py
+│   ├── generate_registers.py
+│   └── validate_detections.py
 ├── sigma/                               (generated Sigma exports)
 │   ├── uc-cloud-001-impossible-travel.yml
 │   ├── uc-email-001-phishing-credential-harvest.yml

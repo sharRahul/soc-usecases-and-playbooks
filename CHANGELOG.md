@@ -8,6 +8,11 @@ The format follows the spirit of [Keep a Changelog](https://keepachangelog.com/e
 
 ### Added
 
+- YAML front-matter schema for every use case, documented in the use-case template.
+- `scripts/generate_registers.py`, which deterministically generates the MITRE ATT&CK coverage tables, the metrics register rows, the use-case index, the data-source onboarding table, Sigma exports in `sigma/`, and an ATT&CK Navigator layer from front-matter.
+- `scripts/validate_detections.py`, which validates every embedded KQL and YAML detection block.
+- Data-source onboarding table listing the telemetry the library depends on.
+- Pull request template with generator and validation checklist.
 - Audit-ready SOC documentation stack.
 - Detection logic documentation standard.
 - Analyst triage instruction template.
