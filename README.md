@@ -120,7 +120,18 @@ UC-EMAIL-001-Phishing-With-Malicious-Link.md
 
 ## Validation
 
-A GitHub Actions workflow validates that each Markdown file in `use-cases/` follows the naming convention, includes the required operational section headers, and stays represented in the metrics and MITRE ATT&CK coverage registers.
+A GitHub Actions workflow validates every push and pull request:
+
+1. Each Markdown file in `use-cases/` follows the naming convention and includes the required operational section headers.
+2. The generated registers, index, Sigma exports, and Navigator layer match a fresh run of `scripts/generate_registers.py`, so the registers cannot drift from the use-case front-matter.
+3. Every embedded KQL and YAML detection block parses via `scripts/validate_detections.py`.
+
+Before submitting a change, run both scripts locally:
+
+```bash
+python3 scripts/generate_registers.py
+python3 scripts/validate_detections.py
+```
 
 ## Analyst operating principle
 
