@@ -32,24 +32,40 @@ Use this repository to:
 ├── CHANGELOG.md
 ├── LICENSE
 ├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── content-request.md
+│   │   └── tuning-request.md
 │   └── workflows/
 │       └── validate-usecases.yml
 ├── docs/
+│   ├── attack-navigator-layer.json      (generated)
+│   ├── data-source-onboarding.md        (generated)
 │   ├── detection-logic-documentation.md
-│   ├── metrics-template.md
-│   ├── mitre-attack-coverage.md
+│   ├── metrics-template.md              (register table generated)
+│   ├── mitre-attack-coverage.md         (coverage tables generated)
 │   ├── playbook-flowcharts.md
 │   ├── threat-intel-integration.md
 │   ├── triage-instructions.md
 │   ├── use-case-lifecycle.md
 │   └── use-case-template.md
+├── scripts/
+│   └── generate_registers.py
+├── sigma/                               (generated Sigma exports)
+│   ├── uc-cloud-001-impossible-travel.yml
+│   ├── uc-email-001-phishing-credential-harvest.yml
+│   ├── uc-endpoint-001-possible-lsass-credential-dump.yml
+│   ├── uc-identity-001-mfa-fatigue-attack.yml
+│   └── uc-identity-002-malicious-oauth-app-consent.yml
 └── use-cases/
+    ├── README.md                        (generated index)
     ├── UC-CLOUD-001-Impossible-Travel.md
     ├── UC-EMAIL-001-Phishing-Credential-Harvest.md
     ├── UC-ENDPOINT-001-Possible-LSASS-Credential-Dump.md
     ├── UC-IDENTITY-001-MFA-Fatigue-Attack.md
     └── UC-IDENTITY-002-Malicious-OAuth-App-Consent.md
 ```
+
+Files marked generated are produced by `scripts/generate_registers.py` from the YAML front-matter in `use-cases/`. Edit the use cases, rerun the generator, and commit the result. CI fails if a generated file is out of date.
 
 ## Quick start
 

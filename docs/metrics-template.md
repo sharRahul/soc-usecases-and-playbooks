@@ -4,13 +4,17 @@ Use this template to track detection performance, response quality, and tuning p
 
 ## Detection metrics table
 
+The register rows below are generated from the YAML front-matter in `use-cases/` by `scripts/generate_registers.py`. Do not add or remove rows by hand. Add the use case with front-matter and rerun the generator.
+
+<!-- BEGIN GENERATED: metrics-register -->
 | Use_Case_ID | Alert_Volume_This_Period | True_Positive_Count | False_Positive_Count | FP_Rate_Percent | MTTD_Minutes | MTTR_Hours | Escalation_Rate_Percent | Notes |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| UC-IDENTITY-001-MFA-Fatigue-Attack |  |  |  |  |  |  |  |  |
-| UC-IDENTITY-002-Malicious-OAuth-App-Consent |  |  |  |  |  |  |  |  |
 | UC-CLOUD-001-Impossible-Travel |  |  |  |  |  |  |  |  |
 | UC-EMAIL-001-Phishing-Credential-Harvest |  |  |  |  |  |  |  |  |
 | UC-ENDPOINT-001-Possible-LSASS-Credential-Dump |  |  |  |  |  |  |  |  |
+| UC-IDENTITY-001-MFA-Fatigue-Attack |  |  |  |  |  |  |  |  |
+| UC-IDENTITY-002-Malicious-OAuth-App-Consent |  |  |  |  |  |  |  |  |
+<!-- END GENERATED: metrics-register -->
 
 ## Field definitions
 
