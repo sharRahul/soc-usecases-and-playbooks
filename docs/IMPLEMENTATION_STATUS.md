@@ -17,17 +17,17 @@ This document separates working repository capability from partial, manual, and 
 | Data-source onboarding | Working starter | `docs/data-source-onboarding.md` is generated from front matter; `docs/data-source-setup-recipes.md` explains practical setup. |
 | Rule deployment guidance | Working | `docs/rule-deployment-guide.md` explains how to adapt KQL, Sigma, and generated content into SIEM-specific rules. |
 | Safe detection testing | Working | `docs/safe-detection-testing.md` gives safe validation patterns without real incident data. |
-| Review metadata | Working documentation | Existing use cases include a review metadata section. CI does not yet enforce the section. |
+| Review metadata | Working documentation | `docs/review-metadata-register.md` tracks review metadata centrally. CI does not yet enforce per-use-case review metadata sections. |
 
 ## Current use-case coverage
 
 | Use case | Domain | Status | Notes |
 | --- | --- | --- | --- |
-| UC-IDENTITY-001 MFA Fatigue Attack | identity | operational | KQL, Sigma, triage, containment, evidence, and review metadata present. |
-| UC-IDENTITY-002 Malicious OAuth App Consent | identity | operational | KQL, Sigma, triage, containment, evidence, and review metadata present. |
-| UC-CLOUD-001 Impossible Travel | cloud | operational | KQL, Sigma, triage, containment, evidence, and review metadata present. |
-| UC-EMAIL-001 Phishing Credential Harvest | email | operational | KQL, Sigma, triage, containment, evidence, and review metadata present. |
-| UC-ENDPOINT-001 Possible LSASS Credential Dump | endpoint | operational | KQL, Sigma, triage, containment, evidence, and review metadata present. |
+| UC-IDENTITY-001 MFA Fatigue Attack | identity | operational | KQL, Sigma, triage, evidence, and central review metadata present. |
+| UC-IDENTITY-002 Malicious OAuth App Consent | identity | operational | KQL, Sigma, triage, evidence, and central review metadata present. |
+| UC-CLOUD-001 Impossible Travel | cloud | operational | KQL, Sigma, triage, evidence, and central review metadata present. |
+| UC-EMAIL-001 Phishing Credential Harvest | email | operational | KQL, Sigma, triage, evidence, and central review metadata present. |
+| UC-ENDPOINT-001 Possible LSASS Credential Dump | endpoint | operational | KQL, Sigma, triage, evidence, and central review metadata present. |
 
 ## What the validation currently proves
 
@@ -47,7 +47,7 @@ Contributors and adopters must still:
 2. Tune thresholds and allowlists to local baseline behaviour.
 3. Confirm required data sources are onboarded and retained.
 4. Review MITRE ATT&CK mappings for local interpretation.
-5. Test escalation and containment steps safely.
+5. Test escalation and response steps safely.
 6. Record alert volume, false positives, MTTD, MTTR, and tuning actions in a controlled metrics location.
 7. Avoid committing real incident data, personal data, client data, or credentials.
 
@@ -67,7 +67,7 @@ Contributors and adopters must still:
 - Added data-source setup recipes.
 - Added rule deployment/adaptation guidance.
 - Added safe detection testing guidance.
-- Added review metadata to existing operational use cases.
+- Added central review metadata register.
 - Updated README documentation index and quick start flow.
 
 ## Contributor rule
@@ -77,7 +77,7 @@ When adding or changing a use case:
 1. Update the YAML front matter first.
 2. Keep all required operational headers.
 3. Include KQL, Sigma, or a clearly documented detection format.
-4. Include review metadata.
+4. Update `docs/review-metadata-register.md` or add a `## Review metadata` section to the use case.
 5. Run `python3 scripts/generate_registers.py`.
 6. Run `python3 scripts/validate_detections.py`.
-7. Update `CHANGELOG.md` for material changes to detection logic, severity, escalation, data sources, or containment guidance.
+7. Update `CHANGELOG.md` for material changes to detection logic, severity, escalation, data sources, or response guidance.
