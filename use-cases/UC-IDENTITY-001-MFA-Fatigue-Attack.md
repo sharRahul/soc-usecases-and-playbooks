@@ -1,3 +1,25 @@
+---
+id: UC-IDENTITY-001
+title: MFA Fatigue Attack
+domain: identity
+severity: high
+attack_focus: MFA request generation
+lifecycle_status: operational
+mitre_tactics:
+  - Credential Access
+mitre_techniques:
+  - T1621
+mitre_mapping:
+  - tactic: Credential Access
+    technique_id: T1621
+    technique_name: Multi-Factor Authentication Request Generation
+    detection_source: Entra ID SigninLogs, Microsoft Authenticator logs
+data_sources:
+  - Entra ID SigninLogs
+  - Microsoft Authenticator logs
+  - Entra ID user and device context
+---
+
 # UC-IDENTITY-001 MFA Fatigue Attack
 
 ## Alert name

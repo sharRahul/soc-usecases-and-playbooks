@@ -1,3 +1,31 @@
+---
+id: UC-IDENTITY-002
+title: Malicious OAuth App Consent
+domain: identity
+severity: high
+attack_focus: OAuth consent abuse and persistent application access
+lifecycle_status: operational
+mitre_tactics:
+  - Defence Evasion
+  - Persistence
+mitre_techniques:
+  - T1550.001
+  - T1098.002
+mitre_mapping:
+  - tactic: Defence Evasion
+    technique_id: T1550.001
+    technique_name: 'Use Alternate Authentication Material: Application Access Token'
+    detection_source: Entra ID AuditLogs, application and service principal inventory
+  - tactic: Persistence
+    technique_id: T1098.002
+    technique_name: 'Account Manipulation: Additional Email Delegate Permissions'
+    detection_source: Entra ID AuditLogs, M365 audit logs
+data_sources:
+  - Entra ID AuditLogs
+  - Entra ID application and service principal inventory
+  - M365 audit logs
+---
+
 # UC-IDENTITY-002 Malicious OAuth App Consent
 
 ## Alert name

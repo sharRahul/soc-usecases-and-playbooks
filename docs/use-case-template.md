@@ -2,6 +2,49 @@
 
 Copy this template into `use-cases/` and rename it using the format `UC-[CATEGORY]-[NNN]-[Description].md`.
 
+## Front-matter
+
+Every use case starts with a YAML front-matter block. The registers in `docs/`, the use-case index, the Sigma exports, and the ATT&CK Navigator layer are all generated from this block by `scripts/generate_registers.py`, so it must be complete and accurate. Run the generator after editing front-matter and commit the regenerated files.
+
+```yaml
+---
+id: UC-CATEGORY-NNN
+title: Short Descriptive Title
+domain: identity
+severity: high
+severity_note: Optional qualifier, for example Tunable to High
+attack_focus: One line describing the behaviour the detection targets
+lifecycle_status: draft
+mitre_tactics:
+  - Tactic Name
+mitre_techniques:
+  - T0000
+mitre_mapping:
+  - tactic: Tactic Name
+    technique_id: T0000
+    technique_name: Technique Name
+    detection_source: Log sources that support this mapping
+data_sources:
+  - Log source name
+---
+```
+
+Field rules:
+
+| Field | Rules |
+| --- | --- |
+| `id` | Must match the filename prefix, format `UC-[CATEGORY]-[NNN]`. |
+| `title` | Human-readable title, matching the filename description. |
+| `domain` | One of `cloud`, `email`, `endpoint`, `identity`, `network`. |
+| `severity` | One of `low`, `medium`, `high`, `critical`. |
+| `severity_note` | Optional. Short qualifier shown next to the severity in generated tables. |
+| `attack_focus` | One line summarising the behaviour, used in the coverage register. |
+| `lifecycle_status` | One of `draft`, `validated`, `operational`, `tuning-required`, `retired`, matching `docs/use-case-lifecycle.md`. |
+| `mitre_tactics` | Every tactic that appears in `mitre_mapping`, no duplicates. |
+| `mitre_techniques` | Every technique ID that appears in `mitre_mapping`, no duplicates. |
+| `mitre_mapping` | One entry per tactic and technique pair, with the technique name and supporting detection source. |
+| `data_sources` | Every log source from the Required data sources table, using consistent names across use cases. |
+
 ## Alert name
 
 `<clear analyst-facing alert title>`

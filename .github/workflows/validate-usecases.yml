@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate use-case filenames, required headers, and register sync
+      - name: Validate use-case filenames and required headers
         shell: bash
         run: |
           set -euo pipefail
@@ -40,20 +40,21 @@ jobs:
 
           echo "# Use-case validation summary" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "| File | Filename | Required headers | Register sync | Result |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| --- | --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| File | Filename | Required headers | Result |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
 
           if [ ! -d "use-cases" ]; then
             echo "::error::use-cases directory was not found"
-            echo "| use-cases/ | Fail | Fail | Fail | Missing directory |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| use-cases/ | Fail | Fail | Missing directory |" >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
 
-          mapfile -t files < <(find use-cases -maxdepth 1 -type f -name '*.md' | sort)
+          # README.md is the generated use-case index, not a use case.
+          mapfile -t files < <(find use-cases -maxdepth 1 -type f -name '*.md' ! -name 'README.md' | sort)
 
           if [ "${#files[@]}" -eq 0 ]; then
             echo "::error::No Markdown use-case files found in use-cases/"
-            echo "| use-cases/ | Fail | Fail | Fail | No Markdown files found |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| use-cases/ | Fail | Fail | No Markdown files found |" >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
 
@@ -64,7 +65,6 @@ jobs:
             use_case_id="${base_name%.md}"
             filename_result="Pass"
             headers_result="Pass"
-            sync_result="Pass"
             result="Pass"
 
             if [[ ! "$base_name" =~ $filename_regex ]]; then
@@ -91,22 +91,26 @@ jobs:
               fi
             done
 
-            if [ -f "docs/metrics-template.md" ] && ! grep -Fq "$use_case_id" docs/metrics-template.md; then
-              sync_result="Fail"
-              result="Fail"
-              status=1
-              echo "::error file=docs/metrics-template.md::Missing metrics row for $use_case_id"
-            fi
-
-            if [ -f "docs/mitre-attack-coverage.md" ] && ! grep -Fq "$use_case_id" docs/mitre-attack-coverage.md; then
-              sync_result="Fail"
-              result="Fail"
-              status=1
-              echo "::error file=docs/mitre-attack-coverage.md::Missing MITRE coverage row for $use_case_id"
-            fi
-
-            echo "[$result] $file - filename: $filename_result, headers: $headers_result, register sync: $sync_result"
-            echo "| \`$file\` | $filename_result | $headers_result | $sync_result | $result |" >> "$GITHUB_STEP_SUMMARY"
+            echo "[$result] $file - filename: $filename_result, headers: $headers_result"
+            echo "| \`$file\` | $filename_result | $headers_result | $result |" >> "$GITHUB_STEP_SUMMARY"
           done
 
           exit "$status"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --quiet pyyaml
+
+      - name: Check generated registers are up to date
+        run: |
+          python scripts/generate_registers.py --check || {
+            echo "::error::Generated registers are stale. Run python scripts/generate_registers.py and commit the result."
+            exit 1
+          }
+
+      - name: Validate embedded KQL and YAML detections
+        run: python scripts/validate_detections.py

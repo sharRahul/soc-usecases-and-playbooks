@@ -1,3 +1,32 @@
+---
+id: UC-EMAIL-001
+title: Phishing Credential Harvest
+domain: email
+severity: high
+attack_focus: Phishing link and credential harvesting exposure
+lifecycle_status: operational
+mitre_tactics:
+  - Initial Access
+  - Reconnaissance
+mitre_techniques:
+  - T1566.002
+  - T1598
+mitre_mapping:
+  - tactic: Initial Access
+    technique_id: T1566.002
+    technique_name: 'Phishing: Spearphishing Link'
+    detection_source: Defender for Office 365 EmailEvents, UrlClickEvents
+  - tactic: Reconnaissance
+    technique_id: T1598
+    technique_name: Phishing for Information
+    detection_source: Defender for Office 365 EmailEvents, UrlClickEvents, Entra ID SigninLogs
+data_sources:
+  - Defender for Office 365 EmailEvents
+  - Defender for Office 365 UrlClickEvents
+  - Entra ID SigninLogs
+  - Email investigation artefacts
+---
+
 # UC-EMAIL-001 Phishing Credential Harvest
 
 ## Alert name
