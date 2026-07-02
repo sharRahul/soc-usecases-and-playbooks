@@ -1,3 +1,26 @@
+---
+id: UC-ENDPOINT-001
+title: Possible LSASS Credential Dump
+domain: endpoint
+severity: critical
+attack_focus: LSASS credential dumping
+lifecycle_status: operational
+mitre_tactics:
+  - Credential Access
+mitre_techniques:
+  - T1003.001
+mitre_mapping:
+  - tactic: Credential Access
+    technique_id: T1003.001
+    technique_name: 'OS Credential Dumping: LSASS Memory'
+    detection_source: MDE DeviceProcessEvents, DeviceEvents, DeviceAlertEvents
+data_sources:
+  - MDE DeviceProcessEvents
+  - MDE DeviceEvents
+  - MDE DeviceAlertEvents
+  - Identity and network logs
+---
+
 # UC-ENDPOINT-001 Possible LSASS Credential Dump
 
 ## Alert name

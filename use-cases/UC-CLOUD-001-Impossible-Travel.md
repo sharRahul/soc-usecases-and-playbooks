@@ -1,3 +1,32 @@
+---
+id: UC-CLOUD-001
+title: Impossible Travel
+domain: cloud
+severity: medium
+severity_note: Tunable to High
+attack_focus: Valid cloud account use from implausible locations
+lifecycle_status: operational
+mitre_tactics:
+  - Initial Access
+mitre_techniques:
+  - T1078
+  - T1078.004
+mitre_mapping:
+  - tactic: Initial Access
+    technique_id: T1078
+    technique_name: Valid Accounts
+    detection_source: Entra ID SigninLogs, AADNonInteractiveUserSignInLogs
+  - tactic: Initial Access
+    technique_id: T1078.004
+    technique_name: 'Valid Accounts: Cloud Accounts'
+    detection_source: Entra ID SigninLogs, AADNonInteractiveUserSignInLogs
+data_sources:
+  - Entra ID SigninLogs
+  - AADNonInteractiveUserSignInLogs
+  - VPN and proxy logs
+  - Entra ID risk signals
+---
+
 # UC-CLOUD-001 Impossible Travel
 
 ## Alert name
