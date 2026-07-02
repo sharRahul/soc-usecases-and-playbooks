@@ -1,10 +1,10 @@
 # SOC Use Cases & Playbooks
 
-An open, practical library of SOC detection use cases, triage instructions, and incident response playbooks. The goal is to help analysts move from an alert name to a consistent investigation path, evidence record, decision tree, and escalation outcome.
+An open, practical library of SOC detection use cases, analyst guidance, and operational playbooks. The goal is to help analysts move from an alert name to a consistent investigation path, evidence record, decision tree, and escalation outcome.
 
 ## Why this exists
 
-A SOC repository is only useful if an analyst can follow it during a real alert. This project is designed to make detection logic and response playbooks clear enough for junior analysts, reusable enough for security engineers, and traceable enough for audit and assurance reviews.
+A SOC repository is only useful if an analyst can follow it during a real alert. This project is designed to make detection logic and response guidance clear enough for junior analysts, reusable enough for security engineers, and traceable enough for audit and assurance reviews.
 
 Use this repository to:
 
@@ -12,7 +12,7 @@ Use this repository to:
 - Capture required data sources, SIEM logic, tuning notes, and false positive guidance.
 - Give analysts repeatable first-response triage steps.
 - Map detections and playbooks to MITRE ATT&CK tactics and techniques.
-- Maintain evidence-friendly response workflows for incident review and continuous improvement.
+- Maintain evidence-friendly operational workflows for review and continuous improvement.
 
 ## Who this is for
 
@@ -23,6 +23,25 @@ Use this repository to:
 - Security managers building a use-case library
 - GRC teams that need traceability between monitoring controls and operational evidence
 
+## Documentation index
+
+| Document | Read it for |
+| --- | --- |
+| [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md) | What works today, what validation proves, and what remains backlog. |
+| [`docs/detection-logic-documentation.md`](docs/detection-logic-documentation.md) | Required detection documentation fields and review expectations. |
+| [`docs/use-case-template.md`](docs/use-case-template.md) | Copyable structure for a new use case. |
+| [`docs/use-case-lifecycle.md`](docs/use-case-lifecycle.md) | Draft, validated, operational, tuning-required, and retired status expectations. |
+| [`docs/data-source-onboarding.md`](docs/data-source-onboarding.md) | Generated table of required data sources by use case. |
+| [`docs/data-source-setup-recipes.md`](docs/data-source-setup-recipes.md) | Practical onboarding and validation recipes for required telemetry. |
+| [`docs/rule-deployment-guide.md`](docs/rule-deployment-guide.md) | How to adapt KQL, Sigma, and playbooks into SIEM-specific rules. |
+| [`docs/safe-detection-testing.md`](docs/safe-detection-testing.md) | How to validate detections with lab, benign, or synthetic data. |
+| [`docs/review-metadata-register.md`](docs/review-metadata-register.md) | Central review ownership, cadence, and test-evidence tracking. |
+| [`docs/triage-instructions.md`](docs/triage-instructions.md) | Analyst first-response template. |
+| [`docs/playbook-flowcharts.md`](docs/playbook-flowcharts.md) | Mermaid decision trees for each playbook. |
+| [`docs/mitre-attack-coverage.md`](docs/mitre-attack-coverage.md) | Generated ATT&CK coverage and improvement backlog. |
+| [`docs/metrics-template.md`](docs/metrics-template.md) | Metrics register and monthly/quarterly review guidance. |
+| [`docs/threat-intel-integration.md`](docs/threat-intel-integration.md) | Enrichment process. |
+
 ## Repository structure
 
 ```text
@@ -31,67 +50,28 @@ Use this repository to:
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
 ├── LICENSE
-├── .gitignore
 ├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── content-request.md
-│   │   └── tuning-request.md
-│   ├── pull_request_template.md
-│   └── workflows/
-│       └── validate-usecases.yml
 ├── docs/
-│   ├── attack-navigator-layer.json      (generated)
-│   ├── data-source-onboarding.md        (generated)
-│   ├── detection-logic-documentation.md
-│   ├── metrics-template.md              (register table generated)
-│   ├── mitre-attack-coverage.md         (coverage tables generated)
-│   ├── playbook-flowcharts.md
-│   ├── threat-intel-integration.md
-│   ├── triage-instructions.md
-│   ├── use-case-lifecycle.md
-│   └── use-case-template.md
 ├── scripts/
-│   ├── generate_registers.py
-│   └── validate_detections.py
-├── sigma/                               (generated Sigma exports)
-│   ├── uc-cloud-001-impossible-travel.yml
-│   ├── uc-email-001-phishing-credential-harvest.yml
-│   ├── uc-endpoint-001-possible-lsass-credential-dump.yml
-│   ├── uc-identity-001-mfa-fatigue-attack.yml
-│   └── uc-identity-002-malicious-oauth-app-consent.yml
+├── sigma/
 └── use-cases/
-    ├── README.md                        (generated index)
-    ├── UC-CLOUD-001-Impossible-Travel.md
-    ├── UC-EMAIL-001-Phishing-Credential-Harvest.md
-    ├── UC-ENDPOINT-001-Possible-LSASS-Credential-Dump.md
-    ├── UC-IDENTITY-001-MFA-Fatigue-Attack.md
-    └── UC-IDENTITY-002-Malicious-OAuth-App-Consent.md
 ```
 
-Files marked generated are produced by `scripts/generate_registers.py` from the YAML front-matter in `use-cases/`. Edit the use cases, rerun the generator, and commit the result. CI fails if a generated file is out of date.
+Generated files are produced by `scripts/generate_registers.py` from YAML front matter in `use-cases/`. Edit the use cases, rerun the generator, and commit the result. CI fails if generated files are out of date.
 
 ## Quick start
 
-1. Read [`docs/detection-logic-documentation.md`](docs/detection-logic-documentation.md) to understand the required fields for every detection.
-2. Use [`docs/use-case-template.md`](docs/use-case-template.md) when drafting a new detection or playbook.
-3. Use [`docs/use-case-lifecycle.md`](docs/use-case-lifecycle.md) to understand draft, validated, operational, tuning-required, and retired status expectations.
-4. Review the first populated use cases in [`use-cases/`](use-cases/).
-5. Use [`docs/triage-instructions.md`](docs/triage-instructions.md) as the analyst first-response template.
-6. Use [`docs/playbook-flowcharts.md`](docs/playbook-flowcharts.md) to follow Mermaid decision trees for each playbook.
-7. Maintain ATT&CK mapping in [`docs/mitre-attack-coverage.md`](docs/mitre-attack-coverage.md).
-8. Track detection quality with [`docs/metrics-template.md`](docs/metrics-template.md).
-9. Use [`docs/threat-intel-integration.md`](docs/threat-intel-integration.md) to enrich detections with threat intelligence.
-10. Update [`CHANGELOG.md`](CHANGELOG.md) whenever detection logic, playbook steps, escalation criteria, or severity guidance changes.
-
-## Initial use cases
-
-| Use case | Focus | Severity |
-| --- | --- | --- |
-| [`UC-IDENTITY-001-MFA-Fatigue-Attack`](use-cases/UC-IDENTITY-001-MFA-Fatigue-Attack.md) | Repeated MFA failures followed by success | High |
-| [`UC-IDENTITY-002-Malicious-OAuth-App-Consent`](use-cases/UC-IDENTITY-002-Malicious-OAuth-App-Consent.md) | Risky third-party OAuth consent | High |
-| [`UC-CLOUD-001-Impossible-Travel`](use-cases/UC-CLOUD-001-Impossible-Travel.md) | Implausible cloud account travel pattern | Medium, tunable to High |
-| [`UC-EMAIL-001-Phishing-Credential-Harvest`](use-cases/UC-EMAIL-001-Phishing-Credential-Harvest.md) | Phishing email with allowed URL click | High |
-| [`UC-ENDPOINT-001-Possible-LSASS-Credential-Dump`](use-cases/UC-ENDPOINT-001-Possible-LSASS-Credential-Dump.md) | Possible LSASS credential dumping | Critical |
+1. Read [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md) to understand current capability and validation boundaries.
+2. Read [`docs/detection-logic-documentation.md`](docs/detection-logic-documentation.md) to understand required fields for every detection.
+3. Use [`docs/use-case-template.md`](docs/use-case-template.md) when drafting a new detection or playbook.
+4. Use [`docs/use-case-lifecycle.md`](docs/use-case-lifecycle.md) to understand lifecycle status expectations.
+5. Review the populated use cases in `use-cases/`.
+6. Confirm required telemetry with [`docs/data-source-onboarding.md`](docs/data-source-onboarding.md) and [`docs/data-source-setup-recipes.md`](docs/data-source-setup-recipes.md).
+7. Use [`docs/rule-deployment-guide.md`](docs/rule-deployment-guide.md) before adapting detections into a SIEM or analytics platform.
+8. Use [`docs/safe-detection-testing.md`](docs/safe-detection-testing.md) before validating logic.
+9. Use [`docs/triage-instructions.md`](docs/triage-instructions.md) as the analyst first-response template.
+10. Track review ownership in [`docs/review-metadata-register.md`](docs/review-metadata-register.md).
+11. Update [`CHANGELOG.md`](CHANGELOG.md) whenever detection logic, playbook steps, escalation criteria, severity guidance, data sources, or review ownership changes.
 
 ## Minimum standard for each SOC use case
 
@@ -99,9 +79,9 @@ Each use case should include:
 
 - Alert name
 - Objective
-- Threat scenario
+- Scenario summary
 - Required data sources
-- Detection logic format, such as Sigma, KQL, SPL, YARA, or SIEM-native rule
+- Detection logic format, such as Sigma, KQL, SPL, or SIEM-native rule
 - MITRE ATT&CK mapping
 - Severity and priority guidance
 - False positive scenarios
@@ -109,25 +89,17 @@ Each use case should include:
 - Triage steps
 - Escalation criteria
 - Evidence to preserve
-- Containment and recovery actions
+- Response actions
 - Lessons learned fields
-
-## Example use-case naming convention
-
-```text
-UC-IDENTITY-001-Suspicious-MFA-Fatigue.md
-UC-ENDPOINT-001-Possible-Credential-Dumping.md
-UC-CLOUD-001-Impossible-Travel.md
-UC-EMAIL-001-Phishing-With-Malicious-Link.md
-```
+- Review metadata in the use case or in [`docs/review-metadata-register.md`](docs/review-metadata-register.md)
 
 ## Validation
 
 A GitHub Actions workflow validates every push and pull request:
 
 1. Each Markdown file in `use-cases/` follows the naming convention and includes the required operational section headers.
-2. The generated registers, index, Sigma exports, and Navigator layer match a fresh run of `scripts/generate_registers.py`, so the registers cannot drift from the use-case front-matter.
-3. Every embedded KQL and YAML detection block parses via `scripts/validate_detections.py`.
+2. Generated registers, indexes, Sigma exports, and Navigator layer match a fresh run of `scripts/generate_registers.py`.
+3. Embedded KQL and YAML detection blocks parse via `scripts/validate_detections.py`.
 
 Before submitting a change, run both scripts locally:
 
@@ -148,17 +120,7 @@ At 03:00, the analyst should be able to answer:
 
 ## Audit and assurance value
 
-This repository can support evidence for security monitoring and incident response controls by showing:
-
-- Detection coverage.
-- Data source dependencies.
-- Alert triage process.
-- Incident escalation decision logic.
-- MITRE ATT&CK coverage.
-- Playbook change history.
-- Response evidence expectations.
-- Metrics review and tuning cadence.
-- Threat intelligence enrichment process.
+This repository can support evidence for monitoring controls by showing detection coverage, data-source dependencies, alert triage process, escalation logic, MITRE ATT&CK coverage, playbook change history, response evidence expectations, metrics review, tuning cadence, enrichment process, and review ownership.
 
 ## Contributing
 
@@ -170,4 +132,4 @@ This repository is licensed under the MIT License. See [`LICENSE`](LICENSE) for 
 
 ## Disclaimer
 
-This repository contains practical security operations guidance. Test detection logic safely before production deployment, tune thresholds to your environment, and do not include real incident data, client information, credentials, or sensitive artefacts in contributions.
+This repository contains practical security operations guidance. Test detection logic safely before production deployment, tune thresholds to your environment, and do not include real case data, client information, credentials, or sensitive artefacts in contributions.
